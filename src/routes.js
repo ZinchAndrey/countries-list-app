@@ -4,7 +4,7 @@ import CountriesList from './pages/countries/CountriesList.vue';
 import CountryDetail from './pages/country-detail/CountryDetail.vue';
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/countries-list-app/'),
   routes: [
     { path: '/', redirect: '/countries' },
     { path: '/countries', component: CountriesList },
