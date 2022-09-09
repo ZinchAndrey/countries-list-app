@@ -21,8 +21,8 @@
     <input
       type="text"
       class="search"
+      :value="searchTerm"
       @input="search"
-      v-model="searchTerm"
       placeholder="Search for a country…"
     />
     <button class="clear-btn" @click="clearSearchField" v-show="hasSearchValue">
@@ -39,21 +39,24 @@
 export default {
   data() {
     return {
-      searchTerm: "",
+      // searchTerm: "",
     };
   },
   computed: {
+    searchTerm() {
+      return this.$store.getters.currentSearchValue;
+    },
     hasSearchValue() {
       return !!this.searchTerm.length;
     },
   },
   methods: {
-    search() {
-      this.$store.commit("setSearchValue", this.searchTerm);
+    search(evt) {
+      this.$store.commit("setSearchValue", evt.target.value);
     },
     clearSearchField() {
-      this.searchTerm = "";
-      this.$store.commit("setSearchValue", this.searchTerm);
+      console.log('test');
+      this.$store.commit("clearSearchValue");
     },
   },
 };

@@ -4,6 +4,7 @@ const store = createStore({
   state() {
     return {
       countries: [],
+      currentCountry: null,
       currentRegionFilter: 'All regions',
       currentSearchValue: '',
       isDarkTheme: localStorage.getItem('isDarkTheme') === 'true' ? true : false,
@@ -12,6 +13,9 @@ const store = createStore({
   getters: {
     countries(state) {
       return state.countries;
+    },
+    currentCountry(state) {
+      return state.currentCountry;
     },
     getCountry(state, name) {
       const countries = state.countries;
@@ -33,17 +37,18 @@ const store = createStore({
   mutations: {
     setCountries(state, payload) {
       state.countries = payload;
-      // console.log(this.state.countries);
     },
-    // setCurrentCountry(state, payload) {
-    //   state.countries = payload;
-    //   console.log(this.state.countries);
-    // },
+    setCurrentCountry(state, payload) {
+      state.currentCountry = payload;
+    },
     setRegionFilter(state, payload) {
       state.currentRegionFilter = payload;
     },
     setSearchValue(state, payload) {
       state.currentSearchValue = payload;
+    },
+    clearSearchValue(state) {
+      state.currentSearchValue = '';
     },
     changeThemeColor(state, payload) {
       localStorage.setItem('isDarkTheme', payload);
@@ -80,6 +85,28 @@ const store = createStore({
       });
 
       context.commit('setCountries', countries);
+    },
+    async loadCurrentCountry(context, countryName) {
+      const response = await fetch(`https://restcountries.com/v2/name/${countryName}`);
+      const responseData = await response.json();
+
+      const loadedCountry = responseData[0];
+      const currentCountry = {
+        name: loadedCountry.name,
+        population: loadedCountry.population,
+        capital: loadedCountry.capital,
+        nativeName: loadedCountry.nativeName,
+        region: loadedCountry.region,
+        subRegion: loadedCountry.subregion,
+        languages: loadedCountry.languages,
+        currencies: loadedCountry.currencies,
+        borderCountries: loadedCountry.borders,
+        flagSrc: loadedCountry.flag,
+        topLevelDomain: loadedCountry.topLevelDomain,
+        key: loadedCountry.name,
+      }
+
+      context.commit('setCurrentCountry', currentCountry);
     },
   }
 });

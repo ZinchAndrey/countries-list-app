@@ -4,9 +4,7 @@
       <p>{{ error }}</p>
     </base-dialog>
 
-    <keep-alive>
       <country-header></country-header>
-    </keep-alive>
     <!-- filter  -->
     <div v-if="isLoading">
       <base-spinner></base-spinner>
@@ -100,7 +98,9 @@ export default {
     },
   },
   created() {
-    this.loadCountries();
+    if (!this.countriesWasLoaded) {
+      this.loadCountries();
+    }
   },
 };
 </script>

@@ -14,32 +14,32 @@
             {{ country.name }}
           </h2>
           <ul class="country__description-list">
-            <li class="country__description-item">
+            <li class="country__description-item" v-if="country.nativeName">
               <b>Native Name:</b> {{ country.nativeName }}
             </li>
-            <li class="country__description-item">
+            <li class="country__description-item" v-if="population">
               <b>Population:</b> {{ population }}
             </li>
-            <li class="country__description-item">
+            <li class="country__description-item" v-if="country.region">
               <b>Region:</b> {{ country.region }}
             </li>
-            <li class="country__description-item">
+            <li class="country__description-item" v-if="country.subRegion">
               <b>Sub Region:</b> {{ country.subRegion }}
             </li>
-            <li class="country__description-item">
+            <li class="country__description-item" v-if="country.capital">
               <b>Capital:</b> {{ country.capital }}
             </li>
-            <li class="country__description-item">
+            <li class="country__description-item" v-if="topLevelDomain">
               <b>Top Level Domain:</b> {{ topLevelDomain }}
             </li>
-            <li class="country__description-item">
+            <li class="country__description-item" v-if="currencies">
               <b>Currencies:</b> {{ currencies }}
             </li>
-            <li class="country__description-item">
+            <li class="country__description-item" v-if="languages">
               <b>Languages:</b> {{ languages }}
             </li>
           </ul>
-          <div class="country__borders-block">
+          <div class="country__borders-block" v-if="hasBorderCountries">
             <b>Border Countries:</b>
             <ul class="country__borders-list">
               <li
@@ -53,6 +53,7 @@
               </li>
             </ul>
           </div>
+          <p v-else><b>No border countries.</b></p>
         </div>
       </section>
     </div>
@@ -87,17 +88,12 @@ export default {
       return this.$route.params.countryKey;
     },
     countriesLoaded() {
-      return !this.isLoading && !!this.$store.getters.countries.length;
+      return !this.isLoading && !!this.$store.getters.countries.length || !this.isLoading && !!this.$store.getters.currentCountry;
     },
     country() {
       let countries = this.$store.getters.countries;
 
-      // if (!countries.length) {
-      //   this.loadCountries();
-      // }
-      // countries = this.$store.getters.countries;
-
-      return countries.find((country) => country.key === this.countryKey);
+      return countries.length > 0 ? countries.find((country) => country.key === this.countryKey) : this.$store.getters.currentCountry;
     },
     population() {
       return this.country.population
@@ -122,19 +118,23 @@ export default {
       );
       return topLevelDomains.slice(0, -2);
     },
+    hasBorderCountries() {
+      return (
+        !!this.country.borderCountries && !!this.country.borderCountries.length
+      );
+    },
   },
   methods: {
     goBack() {
       this.$router.back();
     },
-    // Возможно, здесь нужно только одну страну загружать?
-    // Если да, то где хранить информацию об этом? Здесь или в хранилище?
-    async loadCountries() {
+    async loadCurrentCountry(countryName) {
       this.isLoading = true;
 
       try {
-        await this.$store.dispatch("loadCountries");
+        await this.$store.dispatch("loadCurrentCountry", countryName);
       } catch (error) {
+        console.log(error);
         this.error = error.message || "Sorry, we have an error";
       }
 
@@ -145,7 +145,7 @@ export default {
     const countries = this.$store.getters.countries;
 
     if (!countries.length) {
-      this.loadCountries();
+      this.loadCurrentCountry(this.countryKey);
     }
   },
 };
