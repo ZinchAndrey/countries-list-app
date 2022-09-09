@@ -1,6 +1,6 @@
 # countries-list-app
 
-Ознакомиться с проектом можно по ссылке - https://zinchandrey.github.io/countries-list-app/
+Ознакомиться с проектом можно по ссылке - https://countries-list-vue-app.web.app
 
 
 ## Список вопросов
