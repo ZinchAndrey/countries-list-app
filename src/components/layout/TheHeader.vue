@@ -2,7 +2,7 @@
   <header class="header">
     <base-container class="header__wrapper">
       <!-- Возможно это ссылка на главную  -->
-      <a class="title" href="/countries">Where in the world</a>
+      <router-link class="title" to="/countries">Where in the world</router-link>
       <label class="dark-mode-label" for="dark-theme">
         <input
           class="visually-hidden"

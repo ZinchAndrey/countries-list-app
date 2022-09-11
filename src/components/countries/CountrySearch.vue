@@ -1,6 +1,7 @@
 <template>
   <div class="search__block">
-    <svg class="search__icon"
+    <svg
+      class="search__icon"
       width="18"
       height="18"
       viewBox="0 0 18 18"
@@ -39,24 +40,29 @@
 export default {
   data() {
     return {
-      // searchTerm: "",
+      searchTerm: this.$store.getters.currentSearchValue,
     };
   },
   computed: {
-    searchTerm() {
-      return this.$store.getters.currentSearchValue;
-    },
     hasSearchValue() {
       return !!this.searchTerm.length;
     },
   },
   methods: {
     search(evt) {
-      this.$store.commit("setSearchValue", evt.target.value);
+      const DEBOUNCE_TIMEOUT = 1000;
+
+      setTimeout(() => {
+        if (this.searchTerm === evt.target.value) {
+          return;
+        }
+        this.$store.commit("setSearchValue", evt.target.value);
+        this.searchTerm = this.$store.getters.currentSearchValue;
+      }, DEBOUNCE_TIMEOUT)
     },
     clearSearchField() {
-      console.log('test');
       this.$store.commit("clearSearchValue");
+      this.searchTerm = "";
     },
   },
 };
