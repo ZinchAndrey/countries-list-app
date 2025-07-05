@@ -30,7 +30,7 @@
               <b>Capital:</b> {{ country.capital }}
             </li>
             <li class="country__description-item" v-if="topLevelDomain">
-              <b>Top Level Domain:</b> {{ topLevelDomain }}
+              <!-- <b>Top Level Domain:</b> {{ topLevelDomain }} -->
             </li>
             <li class="country__description-item" v-if="currencies">
               <b>Currencies:</b> {{ currencies }}
@@ -108,16 +108,16 @@ export default {
         );
       return currenciesStr.slice(0, -2);
     },
-    topLevelDomain() {
-      // ВЫНЕСТИ ВО ВСПОМОГАТЕЛЬНУЮ ФУНКЦИЮ
-      const topLevelDomains = this.country.topLevelDomain.reduce(
-        (prev, current) => {
-          return prev + current + ", ";
-        },
-        ""
-      );
-      return topLevelDomains.slice(0, -2);
-    },
+    // topLevelDomain() {
+    //   // ВЫНЕСТИ ВО ВСПОМОГАТЕЛЬНУЮ ФУНКЦИЮ
+    //   const topLevelDomains = this.country.topLevelDomain.reduce(
+    //     (prev, current) => {
+    //       return prev + current + ", ";
+    //     },
+    //     ""
+    //   );
+    //   return topLevelDomains.slice(0, -2);
+    // },
     hasBorderCountries() {
       return (
         !!this.country.borderCountries && !!this.country.borderCountries.length

@@ -58,7 +58,10 @@ const store = createStore({
   // используем action для работы с асинхронным кодом
   actions: {
     async loadCountries(context) {
-      const response = await fetch('https://restcountries.com/v2/all');
+      // const response = await fetch('https://restcountries.com/v2/all');
+      const response = await fetch('https://restcountries.com/v2/all?fields=name,population,capital,nativeName,region,subRegion,languages,currencies,borders,flag');
+      // больше 10 полей нельзя
+      // topLevelDomain можно убрать  
       const responseData = await response.json();
 
       const loadedCountries = responseData;
